@@ -1,0 +1,31 @@
+﻿@page "/weather/add"
+
+<h1>Weather forecast</h1>
+
+<EditForm Model="Forecast" OnValidSubmit="CreateForecast">
+    <ValidationSummary/>
+    <DataAnnotationsValidator/>
+
+    <div class="edit-form">
+        Date
+        <InputDate @bind-Value="Forecast.Date" class="form-control"/>
+    </div>
+    <div class="edit-form">
+        Temperature (C)
+        <InputNumber @bind-Value="Forecast.TemperatureC" class="form-control"/>
+    </div>
+    <div class="edit-form">
+        Temperature (F): @Forecast.TemperatureF
+    </div>
+    <div class="edit-form">
+        Summary
+        <InputText @bind-Value="Forecast.Summary" class="form-control"/>
+    </div>
+    <div class="edit-form">
+        Take your umbrella?
+        <InputCheckbox @bind-Value="Forecast.NeedsUmbrella"/>
+    </div>
+    <div class="edit-form">
+        <button class="btn btn-success">Add</button>
+    </div>
+</EditForm>

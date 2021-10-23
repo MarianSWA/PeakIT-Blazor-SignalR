@@ -1,0 +1,104 @@
+﻿@page "/fetchdata"
+
+@using BlazorServerWeather.Data
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.EntityFrameworkCore
+
+@implements IAsyncDisposable
+
+@inject ApplicationDbContext Context
+@inject NavigationManager NavigationManager
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+<button class="btn btn-success" @onclick="AddForecast">Add</button>
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+                <th>Needs umberella?</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                    <td>@(forecast.NeedsUmbrella ? "Yes" : "No")</td>
+                    <td><button class="btn btn-danger" @onclick="() => DeleteForecast(forecast)">Delete</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<WeatherForecast> forecasts;
+
+    public HubConnection hubConnection { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await Context.WeatherForecasts.ToListAsync();
+        
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/weatherhub"))
+            .Build();
+
+        hubConnection.On("ReceiveAddForecast", (WeatherForecast forecast) =>
+        {
+            Console.WriteLine("received add command " + forecast.Id);
+            forecasts.Add(forecast);
+            StateHasChanged();
+        });
+        
+        hubConnection.On("ReceiveDeleteForecast", (int forecastId) =>
+        {
+            Console.WriteLine("received delete command " + forecastId);
+            WeatherForecast forecast = forecasts.FirstOrDefault( f => f.Id == forecastId);
+            forecasts.Remove(forecast);
+            StateHasChanged();
+        });
+        
+        await hubConnection.StartAsync();
+    }
+
+    private void AddForecast()
+    {
+        NavigationManager.NavigateTo("weather/add");
+    }
+    
+    private void DeleteForecast(WeatherForecast forecast)
+    {
+        Context.WeatherForecasts.Remove(forecast);
+        Context.SaveChanges();
+
+        forecasts.Remove(forecast);
+        hubConnection.SendAsync("DeleteForecast", forecast.Id);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is null)
+        {
+            return;
+        }
+        
+        await hubConnection.DisposeAsync();
+    }
+
+}

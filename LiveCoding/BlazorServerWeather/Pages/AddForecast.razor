@@ -1,0 +1,70 @@
+﻿@page "/weather/add"
+
+@using BlazorServerWeather.Data
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext Context
+@inject NavigationManager NavigationManager
+
+@implements IAsyncDisposable
+
+<EditForm Model="Forecast" OnValidSubmit="SaveForecast">
+    <div class="input-group">
+        Summary
+        <InputText @bind-Value="Forecast.Summary"/>
+    </div>
+    <div class="input-group">
+        Date
+        <InputDate @bind-Value="Forecast.Date"/>
+    </div>
+    <div class="input-group">
+        Temperature (C)
+        <InputNumber @bind-Value="Forecast.TemperatureC"/>
+    </div>
+    <div class="input-group">
+        Temperature (F): @Forecast.TemperatureF
+    </div>
+    <div class="input-group">
+        Needs umbrella
+        <InputCheckbox @bind-Value="Forecast.NeedsUmbrella"/>
+    </div>
+    <div class="input-group">
+        <button class="btn btn-success">Submit</button>
+    </div>
+</EditForm>
+
+@code {
+    private WeatherForecast Forecast { get; set; } = new WeatherForecast();
+
+    public HubConnection hubConnection { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/weatherhub"))
+            .Build();
+        await hubConnection.StartAsync();
+    }
+
+    private void SaveForecast()
+    {
+        Context.WeatherForecasts.Add(Forecast);
+        int changes = Context.SaveChanges();
+        if (changes > 0)
+        {
+            hubConnection.SendAsync("AddForecast", Forecast);
+
+            NavigationManager.NavigateTo("fetchdata");
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is null)
+        {
+            return;
+        }
+        
+        await hubConnection.DisposeAsync();
+    }
+}

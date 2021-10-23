@@ -1,0 +1,12 @@
+/Users/apple/Desktop/PeakIT4/Finished/DemoWebAssembly/Shared/bin/Debug/net5.0/DemoWebAssembly.Shared.deps.json
+/Users/apple/Desktop/PeakIT4/Finished/DemoWebAssembly/Shared/bin/Debug/net5.0/DemoWebAssembly.Shared.dll
+/Users/apple/Desktop/PeakIT4/Finished/DemoWebAssembly/Shared/bin/Debug/net5.0/ref/DemoWebAssembly.Shared.dll
+/Users/apple/Desktop/PeakIT4/Finished/DemoWebAssembly/Shared/bin/Debug/net5.0/DemoWebAssembly.Shared.pdb
+/Users/apple/Desktop/PeakIT4/Finished/DemoWebAssembly/Shared/obj/Debug/net5.0/DemoWebAssembly.Shared.csproj.AssemblyReference.cache
+/Users/apple/Desktop/PeakIT4/Finished/DemoWebAssembly/Shared/obj/Debug/net5.0/DemoWebAssembly.Shared.GeneratedMSBuildEditorConfig.editorconfig
+/Users/apple/Desktop/PeakIT4/Finished/DemoWebAssembly/Shared/obj/Debug/net5.0/DemoWebAssembly.Shared.AssemblyInfoInputs.cache
+/Users/apple/Desktop/PeakIT4/Finished/DemoWebAssembly/Shared/obj/Debug/net5.0/DemoWebAssembly.Shared.AssemblyInfo.cs
+/Users/apple/Desktop/PeakIT4/Finished/DemoWebAssembly/Shared/obj/Debug/net5.0/DemoWebAssembly.Shared.csproj.CoreCompileInputs.cache
+/Users/apple/Desktop/PeakIT4/Finished/DemoWebAssembly/Shared/obj/Debug/net5.0/DemoWebAssembly.Shared.dll
+/Users/apple/Desktop/PeakIT4/Finished/DemoWebAssembly/Shared/obj/Debug/net5.0/ref/DemoWebAssembly.Shared.dll
+/Users/apple/Desktop/PeakIT4/Finished/DemoWebAssembly/Shared/obj/Debug/net5.0/DemoWebAssembly.Shared.pdb
